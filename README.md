@@ -12,6 +12,7 @@ pass this info around to plan functions.
 The format of the hosts-config argument is very flexible and largely up
 to the users of pallet-nodelist-helpers to decide. The only standardized
 parts of the config is examplified below:
+
     {"host.to.configure" {:group-spec a-group-spec-for-host
                           :os-family :ubuntu
                           :ip 1.2.3.4
@@ -24,6 +25,7 @@ parts of the config is examplified below:
 is handy for referring to paths on the local machine)
 
 One of the main functions provided is the ability to lift one node for one paritcular phase:
+
     ;; make sure we wrap the call in a with-nodelist-config
     (with-nodelist-config [hosts-config {}]
      (lift-one-node-and-phase hostname :the-phase))
@@ -33,6 +35,7 @@ One of the main functions provided is the ability to lift one node for one parit
 Another useful function is *ensure-nodelist-bindings* to ensure we have a correct
 environment before proceeding if we assume we're withing a *with-nodelist-config*
 block. Example use case from kvm-crate:
+
     (defn configure-kvm-server
       "Set up a machine to act as a KVM server"
       [hostname]
