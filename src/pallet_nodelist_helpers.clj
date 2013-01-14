@@ -105,3 +105,17 @@
   "Check if a given hostname has a given phase (in pallet terminology)."
   [hostname phase]
   (contains? (:phases (get-group-spec hostname)) phase))
+
+(defn run-one-plan-fn
+  "Run a single plan function for a given hostname."
+  ([hostname the-plan-fn] (run-one-plan-fn hostname (get-admin-user hostname) the-plan-fn {}))
+  ([hostname the-plan-fn env-options] (run-one-plan-fn hostname (get-admin-user hostname) the-plan-fn env-options))
+  ([hostname user the-plan-fn env-options]
+     (let [spec (api/group-spec
+                 "one-off-group-spec"
+                 :extends [(api/server-spec :phases {:one-off (api/plan-fn (the-plan-fn))})])
+           config (get-in *nodelist-hosts-config* [hostname])
+           one-off-config {hostname  (assoc config :group-spec spec)}]
+       ;; nest another nodelist config with just this one and our custom spec
+       (with-nodelist-config [one-off-config env-options]
+         (lift-one-node-and-phase hostname user :one-off env-options)))))
