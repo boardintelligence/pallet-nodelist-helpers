@@ -32,7 +32,7 @@
 (defn nodelist-compute-service
   "Create a nodelist compute service based on nodelist hosts config."
   [config]
-  (configure/compute-service "node-list" :node-list (generate-nodelist config)))
+  (compute/instantiate-provider "node-list" :node-list (generate-nodelist config)))
 
 (defmacro with-nodelist-config
   "Utility function to wrap operations to use a particular nodelist config."
