@@ -67,16 +67,16 @@
   (let [admin-username (get-in *nodelist-hosts-config* [hostname :admin-user :username])
         ssh-public-key-path (get-in *nodelist-hosts-config* [hostname :admin-user :ssh-public-key-path])
         ssh-private-key-path (get-in *nodelist-hosts-config* [hostname :admin-user :ssh-private-key-path])
-        passphrase (.getBytes (get-in *nodelist-hosts-config* [hostname :admin-user :passphrase]))]
+        passphrase  (get-in *nodelist-hosts-config* [hostname :admin-user :passphrase])]
     (if (= admin-username "root")
          (api/make-user admin-username
-                        :public-key-path ssh-public-key-path
-                        :private-key-path ssh-private-key-path
+                        :public-key (slurp ssh-public-key-path)
+                        :private-key (slurp ssh-private-key-path)
                         :passphrase passphrase
                         :no-sudo true)
          (api/make-user admin-username
-                        :public-key-path ssh-public-key-path
-                        :private-key-path ssh-private-key-path
+                        :public-key (slurp ssh-public-key-path)
+                        :private-key (slurp ssh-private-key-path)
                         :passphrase passphrase
                         :sudo-user sudo-user))))
 
