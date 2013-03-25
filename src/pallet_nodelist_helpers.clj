@@ -115,7 +115,7 @@
                  "one-off-group-spec"
                  :extends [(api/server-spec :phases {:one-off (api/plan-fn (the-plan-fn))})])
            config (get-in *nodelist-hosts-config* [hostname])
-           one-off-config {hostname  (assoc config :group-spec spec)}]
+           one-off-config (merge *nodelist-hosts-config* {hostname (assoc config :group-spec spec)})]
        ;; nest another nodelist config with just this one and our custom spec
        (with-nodelist-config [one-off-config env-options]
          (lift-one-node-and-phase hostname user :one-off env-options)))))
