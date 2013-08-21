@@ -43,10 +43,8 @@ block. Example use case from kvm-crate:
       (helpers/ensure-nodelist-bindings)
       (when-not (host-is-kvm-server? hostname)
         (throw (IllegalArgumentException. (format "%s is not a kvm-server!" hostname))))
-      (when (fsmop/failed?
-             (helpers/lift-one-node-and-phase hostname
-                                              :configure-kvm-server))
-        (throw (IllegalStateException. "Failed to configure KVM server!"))))
+      (helpers/lift-one-node-and-phase hostname
+                                       :configure-kvm-server))
 
 ## License
 

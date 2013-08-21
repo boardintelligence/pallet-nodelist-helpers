@@ -86,20 +86,13 @@
   ([hostname phase env-options] (lift-one-node-and-phase hostname (get-admin-user hostname) phase env-options))
   ([hostname user phase env-options]
      (let [spec (get-group-spec hostname)
-           node (node-for-hostname hostname)
-           result (api/lift
-                   {spec node}
-                   :environment (merge *pallet-environment* env-options {:host-config *nodelist-hosts-config*})
-                   :phase phase
-                   :user user
-                   :compute *compute-service*)]
-       (fsmop/wait-for result)
-       (when (fsmop/failed? result)
-         (do
-           ;; TODO: use logger here
-           (println "Errors encountered:")
-           (fsmop/report-operation result)))
-       result)))
+           node (node-for-hostname hostname)]
+       (api/lift
+        {spec node}
+        :environment (merge *pallet-environment* env-options {:host-config *nodelist-hosts-config*})
+        :phase phase
+        :user user
+        :compute *compute-service*))))
 
 (defn host-has-phase?
   "Check if a given hostname has a given phase (in pallet terminology)."
