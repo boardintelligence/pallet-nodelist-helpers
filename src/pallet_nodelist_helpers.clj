@@ -3,7 +3,8 @@
    [pallet.algo.fsmop :as fsmop]
    [pallet.configure :as configure]
    [pallet.compute :as compute]
-   [pallet.api :as api]))
+   [pallet.api :as api]
+   [pallet.core.api :as c.api]))
 
 (def ^{:dynamic true
        :doc "Dynamic var epxected to be bound to a map of nodelist hosts config.
@@ -87,12 +88,13 @@
   ([hostname user phase env-options]
      (let [spec (get-group-spec hostname)
            node (node-for-hostname hostname)]
-       (api/lift
-        {spec node}
-        :environment (merge *pallet-environment* env-options {:host-config *nodelist-hosts-config*})
-        :phase phase
-        :user user
-        :compute *compute-service*))))
+       (c.api/throw-phase-errors
+        (api/lift
+         {spec node}
+         :environment (merge *pallet-environment* env-options {:host-config *nodelist-hosts-config*})
+         :phase phase
+         :user user
+         :compute *compute-service*)))))
 
 (defn host-has-phase?
   "Check if a given hostname has a given phase (in pallet terminology)."
